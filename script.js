@@ -163,6 +163,7 @@ function updateDetailsPanel(countyName, cases) {
                     ${c.caseName || '無標題'} ${newsLinkHtml}
                     </h4> 
                     ${c.victimAge && c.victimAge.trim() !== '' ? `[年齡：${c.victimAge}]` : ''}
+                    ${c.injury && c.injury.trim() !== '' ? `[孩童情況：${c.injury}]` : ''}
                     <p>${c.description || '無摘要'}</p>
                     <div class="date">${c.date || ''}</div>
                 </div>
