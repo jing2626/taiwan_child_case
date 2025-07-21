@@ -150,17 +150,18 @@ function updateDetailsPanel(countyName, cases) {
             let newsLinkHtml = ''; // 先建立一個空字串
             if (c.newsLink && c.newsLink.trim() !== '') {
                 newsLinkHtml = `
-                    <div class="case-link">
-                        <a href="${c.newsLink}" target="_blank" rel="noopener noreferrer">相關新聞</a>
-                    </div>
+                    <span class="news-link">
+                        <a href="${c.newsLink}" target="_blank" rel="noopener noreferrer">[新聞]</a>
+                    </span>
                 `;
             }
 
             // 將產生的卡片 HTML 累加到 cardsHtml
             cardsHtml += `
                 <div class="case-card ${typeClass}">
-                    <h4>${c.caseName || '無標題'}</h4> 
-                    <p class="case-subtitle">[${c.caseType || '無分類'}]</p>
+                    <h4>
+                    ${c.caseName || '無標題'} ${newsLinkHtml}
+                    </h4> 
                     ${c.victimAge && c.victimAge.trim() !== '' ? `[年齡：${c.victimAge}]` : ''}
                     <p>${c.description || '無摘要'}</p>
                     <div class="date">${c.date || ''}</div>
@@ -173,4 +174,3 @@ function updateDetailsPanel(countyName, cases) {
     // 最後，將標題和包裝好的卡片容器一起寫入面板
     panel.innerHTML = titleHtml + `<div class="cases-container">${cardsHtml}</div>`;
 }
-
