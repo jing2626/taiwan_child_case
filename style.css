@@ -1,0 +1,78 @@
+/* 基本設定 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', '微軟正黑體', sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* 主容器，使用 Flexbox 進行排版 */
+.container {
+    display: flex;
+    height: 100vh; /* 佔滿整個視窗高度 */
+}
+
+/* 地圖容器 */
+#map {
+    height: 100%;
+    width: 65%; /* 佔 65% 寬度 */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* 案件詳細資訊面板 */
+#details-panel {
+    width: 35%; /* 佔 35% 寬度 */
+    height: 100%;
+    overflow-y: auto; /* 如果內容過多，則顯示滾動條 */
+    padding: 20px;
+    box-sizing: border-box; /* 讓 padding 不會增加寬度 */
+    background-color: #ffffff;
+}
+
+#details-panel h2 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* 單一案件卡片樣式 */
+.case-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-left: 5px solid #e74c3c; /* 紅色標示虐童案 */
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.case-card.juvenile {
+    border-left-color: #3498db; /* 藍色標示少年案件 */
+}
+
+.case-card h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.case-subtitle {
+    font-size: 0.9em;       /* 讓字體稍微大一點點 */
+    font-weight: bold;      /* 【修改處】設定為粗體 */
+    color: #555;             /* 稍微加深顏色以搭配粗體 */
+    margin-top: 0;
+    margin-bottom: 22px;    /* 【修改處】增加與下方案件概要的距離 */
+}
+
+.case-card p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.case-card .date {
+    font-size: 0.8em;
+    color: #999;
+    text-align: right;
+    margin-top: 10px;
+}
