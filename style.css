@@ -534,9 +534,6 @@ body {
     transition: width var(--transition-fast);
 }
 
-.case-card.juvenile::before {
-    background: var(--accent-secondary);
-}
 
 .case-card:hover {
     border-color: var(--border-light);
@@ -563,10 +560,6 @@ body {
     margin-bottom: var(--space-md);
     text-transform: uppercase;
     letter-spacing: 0.025em;
-}
-
-.case-card.juvenile .case-subtitle {
-    color: var(--accent-secondary);
 }
 
 .case-age {
