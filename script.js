@@ -165,7 +165,6 @@ function updateDetailsPanel(countyName, cases) {
                     ${c.victimAge && c.victimAge.trim() !== '' ? `[年齡：${c.victimAge}]` : ''}
                     <p>${c.description || '無摘要'}</p>
                     <div class="date">${c.date || ''}</div>
-                    ${newsLinkHtml}
                 </div>
             `;
         });
