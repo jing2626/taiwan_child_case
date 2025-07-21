@@ -3,228 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台灣兒虐案件地圖 - 互動式資料視覺化平台</title>
-    <meta name="description" content="台灣兒虐案件地圖提供互動式的案件資料視覺化，幫助了解各縣市兒虐案件分布情況">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Leaflet CSS -->
+    <title>台灣兒少案件地圖</title>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
-    
-    <!-- Heroicons -->
-    <script src="https://unpkg.com/@heroicons/react@2.0.18/24/outline/index.js" type="module"></script>
-    
-    <!-- Custom CSS -->
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen" class="loading-screen">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <h2>載入台灣兒虐案件資料中...</h2>
-            <p>請稍候，正在準備互動式地圖</p>
+    <div class="container">
+        <div id="map"></div>
+        
+        <div id="details-panel">
+            <h2>點擊縣市查看詳細案件</h2>
+            <p>案件資訊將會顯示於此。</p>
         </div>
     </div>
 
-    <!-- Main Application -->
-    <div id="app" class="app hidden">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="logo">
-                        <span class="logo-icon">🗺️</span>
-                        <h1 class="logo-text">台灣兒虐案件地圖</h1>
-                    </div>
-                    <div class="subtitle">互動式資料視覺化平台</div>
-                </div>
-                
-                <div class="header-right">
-                    <div class="search-container">
-                        <input type="text" id="search-input" class="search-input" placeholder="搜尋縣市或案件關鍵字...">
-                        <button class="search-button" aria-label="搜尋">
-                            <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <button class="settings-button" aria-label="設定">
-                        <svg class="settings-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Map Container -->
-            <div class="map-container">
-                <div id="map" class="map"></div>
-                
-                <!-- Map Controls -->
-                <div class="map-controls">
-                    <button class="control-button" id="reset-view" title="重設地圖視角">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v0a2 2 0 01-2 2H10a2 2 0 01-2-2v0z"></path>
-                        </svg>
-                    </button>
-                    
-                    <button class="control-button" id="fullscreen-toggle" title="全螢幕模式">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Legend -->
-                <div class="map-legend">
-                    <h3 class="legend-title">案件數量圖例</h3>
-                    <div class="legend-items">
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #374151;"></div>
-                            <span>無案件</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #fbbf24;"></div>
-                            <span>1-2 件</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #f97316;"></div>
-                            <span>3-5 件</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #dc2626;"></div>
-                            <span>6-10 件</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #991b1b;"></div>
-                            <span>10+ 件</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Info Panel -->
-            <div class="info-panel">
-                <!-- Panel Header -->
-                <div class="panel-header">
-                    <h2 id="panel-title" class="panel-title">選擇縣市查看詳細資訊</h2>
-                    <div class="panel-stats" id="panel-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">總案件數</span>
-                            <span class="stat-value" id="total-cases">-</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">虐童案件</span>
-                            <span class="stat-value danger" id="abuse-cases">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filter Controls -->
-                <div class="filter-controls">
-                    <div class="filter-group">
-                        <label for="case-type-filter" class="filter-label">案件類型</label>
-                        <select id="case-type-filter" class="filter-select">
-                            <option value="all">全部案件</option>
-                            <option value="虐童">虐童案件</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label for="sort-order" class="filter-label">排序方式</label>
-                        <select id="sort-order" class="filter-select">
-                            <option value="date-desc">日期 (新到舊)</option>
-                            <option value="date-asc">日期 (舊到新)</option>
-                            <option value="name">案件名稱</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Cases List -->
-                <div class="cases-container">
-                    <div id="cases-list" class="cases-list">
-                        <div class="empty-state">
-                            <div class="empty-icon">📍</div>
-                            <h3>請點擊地圖上的縣市</h3>
-                            <p>選擇任一縣市來查看該地區的兒少案件詳細資訊</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Statistics Footer -->
-        <footer class="stats-footer">
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-counties">22</div>
-                        <div class="stat-description">縣市</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">🚨</div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-all-cases">-</div>
-                        <div class="stat-description">總案件數</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">⚠️</div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-abuse-cases">-</div>
-                        <div class="stat-description">虐童案件</div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Error Modal -->
-    <div id="error-modal" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>載入錯誤</h3>
-                <button class="modal-close" id="error-modal-close">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="error-message">載入資料時發生錯誤，請檢查網路連線後重試。</p>
-            </div>
-            <div class="modal-footer">
-                <button class="button button-secondary" id="error-retry">重新載入</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+
     <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+    
     <script src="https://unpkg.com/topojson-client@3"></script>
+    
     <script src="script.js"></script>
 </body>
 </html>
-
