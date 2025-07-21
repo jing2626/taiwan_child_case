@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台灣兒少案件地圖 - 互動式資料視覺化平台</title>
-    <meta name="description" content="台灣兒少案件地圖提供互動式的案件資料視覺化，幫助了解各縣市兒少保護案件分布情況">
+    <title>台灣兒虐案件地圖 - 互動式資料視覺化平台</title>
+    <meta name="description" content="台灣兒虐案件地圖提供互動式的案件資料視覺化，幫助了解各縣市兒虐案件分布情況">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
@@ -30,7 +30,7 @@
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <h2>載入台灣兒少案件資料中...</h2>
+            <h2>載入台灣兒虐案件資料中...</h2>
             <p>請稍候，正在準備互動式地圖</p>
         </div>
     </div>
@@ -43,7 +43,7 @@
                 <div class="header-left">
                     <div class="logo">
                         <span class="logo-icon">🗺️</span>
-                        <h1 class="logo-text">台灣兒少案件地圖</h1>
+                        <h1 class="logo-text">台灣兒虐案件地圖</h1>
                     </div>
                     <div class="subtitle">互動式資料視覺化平台</div>
                 </div>
@@ -132,10 +132,6 @@
                             <span class="stat-label">虐童案件</span>
                             <span class="stat-value danger" id="abuse-cases">-</span>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-label">少年案件</span>
-                            <span class="stat-value info" id="juvenile-cases">-</span>
-                        </div>
                     </div>
                 </div>
 
@@ -146,7 +142,6 @@
                         <select id="case-type-filter" class="filter-select">
                             <option value="all">全部案件</option>
                             <option value="虐童">虐童案件</option>
-                            <option value="少年案件">少年案件</option>
                         </select>
                     </div>
                     
@@ -197,14 +192,6 @@
                     <div class="stat-content">
                         <div class="stat-number" id="total-abuse-cases">-</div>
                         <div class="stat-description">虐童案件</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-juvenile-cases">-</div>
-                        <div class="stat-description">少年案件</div>
                     </div>
                 </div>
             </div>
