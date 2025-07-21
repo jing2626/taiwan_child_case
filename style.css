@@ -57,11 +57,11 @@ html, body {
 }
 
 .case-subtitle {
-    font-size: 0.9em;       /* 讓字體稍微大一點點 */
-    font-weight: bold;      /* 【修改處】設定為粗體 */
-    color: #555;             /* 稍微加深顏色以搭配粗體 */
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #555;
     margin-top: 0;
-    margin-bottom: 22px;    /* 【修改處】增加與下方案件概要的距離 */
+    margin-bottom: 22px;
 }
 
 .case-card p {
@@ -77,7 +77,7 @@ html, body {
     margin-top: 10px;
 }
 
-/* --- 以下為本次新增，用於響應式設計 (手機版) --- */
+/* --- 以下為手機響應式設計 (使用您提供的版本) --- */
 
 @media (max-width: 768px) {
     /* 1. 將主容器的 flex 方向改為垂直堆疊 */
