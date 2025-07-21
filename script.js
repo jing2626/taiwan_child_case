@@ -138,10 +138,11 @@ function onEachFeature(feature, layer, data) {
 // 4.4. 更新右側詳細資訊面板的函式
 function updateDetailsPanel(countyName, cases) {
     const panel = document.getElementById('details-panel');
-    let content = `<h2>${countyName} - 案件列表 (${cases.length} 件)</h2>`;
+    let titleHtml = `<h2>${countyName} - 案件列表 (${cases.length} 件)</h2>`;
+    let cardsHtml = ''; // 專門用來存放卡片 HTML 的字串
 
     if (cases.length === 0) {
-        content += '<p>此地區目前沒有記錄在案的案件。</p>';
+        cardsHtml = '<p style="padding: 0 20px;">此地區目前沒有記錄在案的案件。</p>';
     } else {
         cases.forEach(c => {
             // 根據案件類型給予不同的 class
@@ -155,7 +156,8 @@ function updateDetailsPanel(countyName, cases) {
                 `;
             }
 
-            content += `
+            // 將產生的卡片 HTML 累加到 cardsHtml
+            cardsHtml += `
                 <div class="case-card ${typeClass}">
                     <h4>${c.caseName || '無標題'}</h4> 
                     <p class="case-subtitle">[${c.caseType || '無分類'}]</p>
@@ -168,5 +170,7 @@ function updateDetailsPanel(countyName, cases) {
         });
     }
 
-    panel.innerHTML = content;
+    // 最後，將標題和包裝好的卡片容器一起寫入面板
+    panel.innerHTML = titleHtml + `<div class="cases-container">${cardsHtml}</div>`;
 }
+
