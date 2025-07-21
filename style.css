@@ -76,3 +76,58 @@ html, body {
     text-align: right;
     margin-top: 10px;
 }
+
+/* --- 以下為本次新增，用於響應式設計 (手機版) --- */
+
+@media (max-width: 768px) {
+    /* 1. 將主容器的 flex 方向改為垂直堆疊 */
+    .container {
+        flex-direction: column;
+    }
+
+    /* 2. 調整地圖與資訊面板的尺寸 */
+    #map {
+        width: 100%;       /* 寬度佔滿 */
+        height: 60vh;      /* 高度佔 60% 視窗高度 */
+    }
+
+    #details-panel {
+        width: 100%;       /* 寬度佔滿 */
+        height: 40vh;      /* 高度佔 40% 視窗高度 */
+        overflow-y: hidden;/* 隱藏垂直滾動條，改由卡片容器處理 */
+        padding-bottom: 0;
+    }
+
+    #details-panel h2 {
+        /* 讓標題在滾動時能稍微固定在頂部 */
+        position: sticky;
+        top: 0;
+        background: #ffffff;
+        z-index: 10;
+    }
+
+    /* 3. 新增卡片容器的樣式，使其可以水平滾動 */
+    .cases-container {
+        display: flex;         /* 讓內部的卡片水平排列 */
+        overflow-x: auto;      /* 內容超出時，顯示水平滾動條 */
+        padding: 20px 0;       /* 增加上下內距，美化外觀 */
+        -webkit-overflow-scrolling: touch; /* 在 iOS 上提供更流暢的滾動體驗 */
+        scrollbar-width: thin; /* 讓滾動條細一點 */
+    }
+
+    /* 4. 調整卡片的樣式以適應水平滾動 */
+    .case-card {
+        flex: 0 0 80vw;    /* 卡片不伸縮，基礎寬度為 80% 視窗寬度 */
+        margin-right: 15px;/* 右邊間距 */
+        margin-bottom: 5px; /* 減少下方間距，因為現在是水平排列 */
+        height: fit-content; /* 高度自動適應內容 */
+    }
+
+    .case-card:first-child {
+        margin-left: 20px; /* 讓第一張卡片有左邊距 */
+    }
+
+    .case-card:last-child {
+        margin-right: 20px; /* 讓最後一張卡片有右邊距 */
+    }
+}
