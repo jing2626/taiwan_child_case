@@ -23,7 +23,6 @@ class TaiwanCasesMap {
             filteredCases: [],
             isLoading: true,
             searchTerm: '',
-            caseTypeFilter: 'all',
             sortOrder: 'date-desc'
         };
 
@@ -36,10 +35,8 @@ class TaiwanCasesMap {
             panelStats: document.getElementById('panel-stats'),
             totalCases: document.getElementById('total-cases'),
             abuseCases: document.getElementById('abuse-cases'),
-            juvenileCases: document.getElementById('juvenile-cases'),
             casesList: document.getElementById('cases-list'),
             searchInput: document.getElementById('search-input'),
-            caseTypeFilter: document.getElementById('case-type-filter'),
             sortOrder: document.getElementById('sort-order'),
             resetViewBtn: document.getElementById('reset-view'),
             fullscreenBtn: document.getElementById('fullscreen-toggle'),
@@ -50,7 +47,6 @@ class TaiwanCasesMap {
             totalCounties: document.getElementById('total-counties'),
             totalAllCases: document.getElementById('total-all-cases'),
             totalAbuseCases: document.getElementById('total-abuse-cases'),
-            totalJuvenileCases: document.getElementById('total-juvenile-cases')
         };
 
         this.init();
@@ -119,10 +115,10 @@ class TaiwanCasesMap {
         }, 300));
 
         // Filter controls
-        this.elements.caseTypeFilter.addEventListener('change', (e) => {
-            this.state.caseTypeFilter = e.target.value;
-            this.filterAndDisplayCases();
-        });
+        //this.elements.caseTypeFilter.addEventListener('change', (e) => {
+            //this.state.caseTypeFilter = e.target.value;
+            //this.filterAndDisplayCases();
+        //});
 
         this.elements.sortOrder.addEventListener('change', (e) => {
             this.state.sortOrder = e.target.value;
@@ -199,8 +195,10 @@ class TaiwanCasesMap {
         const geoJsonData = topojson.feature(topoJsonData, topoJsonData.objects.map);
         
         // Parse CSV data
-        const caseData = d3.csvParse(csvData);
-        this.state.allCases = caseData;
+        //const caseData = d3.csvParse(csvData);
+        //this.state.allCases = caseData;
+        const allParsedCases = d3.csvParse(csvData);
+        this.state.allCases = allParsedCases.filter(c => c.caseType === '虐童');
 
         // Initialize aggregated data
         this.state.aggregatedData = {};
@@ -215,17 +213,14 @@ class TaiwanCasesMap {
         });
 
         // Aggregate case data by county
-        caseData.forEach(row => {
+        this.state.allCases.forEach(row => { // 改用 this.state.allCases
             const countyName = row.county ? row.county.trim() : undefined;
             if (this.state.aggregatedData[countyName]) {
                 this.state.aggregatedData[countyName].total++;
                 this.state.aggregatedData[countyName].cases.push(row);
                 
-                if (row.caseType === '虐童') {
-                    this.state.aggregatedData[countyName].childAbuse++;
-                } else if (row.caseType === '少年案件') {
-                    this.state.aggregatedData[countyName].juvenile++;
-                }
+                // 原本的 if...else if 判斷可以簡化或移除
+                this.state.aggregatedData[countyName].childAbuse++;
             }
         });
 
@@ -272,7 +267,6 @@ class TaiwanCasesMap {
             <div class="map-tooltip">
                 <strong>${countyName}</strong><br>
                 <span style="color: #ef4444;">虐童案: ${countyData.childAbuse} 件</span><br>
-                <span style="color: #06b6d4;">少年案件: ${countyData.juvenile} 件</span><br>
                 <strong>總計: ${countyData.total} 件</strong>
             </div>
         `;
@@ -325,12 +319,12 @@ class TaiwanCasesMap {
         // Calculate statistics
         const totalCases = cases.length;
         const abuseCases = cases.filter(c => c.caseType === '虐童').length;
-        const juvenileCases = cases.filter(c => c.caseType === '少年案件').length;
+        //const juvenileCases = cases.filter(c => c.caseType === '少年案件').length;
 
         // Update statistics
         this.elements.totalCases.textContent = totalCases;
         this.elements.abuseCases.textContent = abuseCases;
-        this.elements.juvenileCases.textContent = juvenileCases;
+        //this.elements.juvenileCases.textContent = juvenileCases;
 
         // Show stats panel
         this.elements.panelStats.style.display = 'grid';
@@ -345,9 +339,9 @@ class TaiwanCasesMap {
         let filteredCases = [...this.state.filteredCases];
 
         // Apply case type filter
-        if (this.state.caseTypeFilter !== 'all') {
-            filteredCases = filteredCases.filter(c => c.caseType === this.state.caseTypeFilter);
-        }
+        //if (this.state.caseTypeFilter !== 'all') {
+            //filteredCases = filteredCases.filter(c => c.caseType === this.state.caseTypeFilter);
+        //}
 
         // Apply search filter
         if (this.state.searchTerm) {
@@ -386,7 +380,7 @@ class TaiwanCasesMap {
     }
 
     createCaseCard(caseData) {
-        const typeClass = caseData.caseType === '少年案件' ? 'juvenile' : '';
+        //const typeClass = caseData.caseType === '少年案件' ? 'juvenile' : '';
         const ageDisplay = caseData.victimAge && caseData.victimAge.trim() !== '' 
             ? `<div class="case-age">年齡：${caseData.victimAge}</div>` 
             : '';
@@ -400,9 +394,8 @@ class TaiwanCasesMap {
             : '';
 
         return `
-            <div class="case-card ${typeClass}">
+            <div class="case-card">
                 <h4 class="case-title">${caseData.caseName || '無標題'}</h4>
-                <div class="case-subtitle">[${caseData.caseType || '無分類'}]</div>
                 ${ageDisplay}
                 <div class="case-description">${caseData.description || '無摘要'}</div>
                 <div class="case-footer">
@@ -438,11 +431,11 @@ class TaiwanCasesMap {
     updateGlobalStats() {
         const totalCases = this.state.allCases.length;
         const abuseCases = this.state.allCases.filter(c => c.caseType === '虐童').length;
-        const juvenileCases = this.state.allCases.filter(c => c.caseType === '少年案件').length;
+        //const juvenileCases = this.state.allCases.filter(c => c.caseType === '少年案件').length;
 
         this.elements.totalAllCases.textContent = totalCases;
         this.elements.totalAbuseCases.textContent = abuseCases;
-        this.elements.totalJuvenileCases.textContent = juvenileCases;
+        //this.elements.totalJuvenileCases.textContent = juvenileCases;
     }
 
     enableMapInteractions() {
